@@ -11,6 +11,19 @@
             min-height:300px;
         }
     </style>
+      <script>
+        let $ = function(cssSelector, message){
+            
+           let htmlelements = document.querySelectorAll(cssSelector);
+           
+           if(message){
+               htmlelements.forEach(e => {e.innerHTML += message + '<br>'});
+           }
+           
+           return htmlelements;
+        }
+        
+    </script>
 </head>
 <body>
     <h1>function</h1>
@@ -264,12 +277,18 @@
     </script>
     
     <script>
-        function $(id,e){
-            id.innerHTML += e;
-        }
-        
-        $(args,'hello');
+        // html 요소객체의 style 속성을 사용해서 html의 css를 수정
+        // css 속성의 경우 snake표기법을, camelCase로 고쳐서 사용해야 한다.
+          $('.note').forEach(e => {
+            e.addEventListener('click',ev => {
+                ev.target.style.backgroundColor='lightblue';
+                ev.target.style.borderRadius='10px';
+                ev.target.style.transitionDuration='3s';
+            });
+        });
     </script>
+    
+  
     
 </body>   
 </html>

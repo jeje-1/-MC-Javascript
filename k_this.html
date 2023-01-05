@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style type="text/css">
+        .note{
+            border: 1px solid;
+            min-height:300px;
+        }
+    </style>
+      <script>
+        let $ = function(cssSelector, message){
+            
+           let htmlelements = document.querySelectorAll(cssSelector);
+           
+           if(message){
+               htmlelements.forEach(e => {e.innerHTML += message + '<br>'});
+           }
+           
+           return htmlelements;
+        }
+        
+    </script>
+</head>
+<body>
+    <h1>this</h1>
+    <h2>2. 함수에서의 this</h2>
+    <pre>
+        this는 arguements 처럼 함수가 실행 될 떄 함께 함수에 전달이 된다.
+    </pre>
+    <div id="thisNote" class="note"></div>
+    <script>
+        //window 객체에 속성으로 등록하기 위해서 var를 사용
+        var who = '전역 객체의 who입니다.'
+        function info(){
+            var who = 'info함수의 who입니다.'
+            $('#thisNote', `who : ${who}`);
+            $('#thisNote', `this.who : ${this.who}`);
+            console.dir(this);
+        }
+        
+        info();
+    </script>
+    
+    <h2>2. 메서드에서의 this</h2>
+    <pre>
+        메서드 안에서의 this는 해당 메서드를 호출할 때 사용한 객체가 바인딩된다.
+    </pre>
+    <div id="thisNote2" class="note"></div>
+    <script>
+        var methodWho = '전역 객체의 who입니다.'
+        
+        let multicampus = {
+            methodWho : '멀티캠퍼스의 who입니다.',
+            info : function(){
+                $('#thisNote2', this.methodWho);
+                console.dir(this);
+            }
+            
+        }
+        
+        let saffy = {
+            methodWho:'saffy의 who입니다.',
+            info : multicampus.info
+        }
+        multicampus.info();
+        saffy.info();
+    </script>
+    
+    <h2>3. 생성자 함수에서의 this</h2>
+    <pre>
+        생성자 함수는 자신이 호출되는 시점에, 함수의 실행결과로 반ㄹ활될 빈 객체를 생서하고, this 레퍼런스에 참조시킨다.
+        생성자 함수로 사용될 떄 return이 없다면 자동으로 this를 반환한다.
+        
+        만약 return 문이 존재한다면,
+        1. 기본타입을 반환하는 return문이라면 무시하고 this를 반환한다.
+        2. 객체를 반환하는 return문이라면 return문에 명시한 객체를 반환한다.
+    </pre>
+    <div class="note" id="thisNote3"></div>
+    <script>
+        function Info(){
+            this.info = function(){
+                $('#thisNote3', this.who);
+            }
+        }
+        
+        let multicampusInfo = new Info();
+        multicampusInfo.who = '멀티캠퍼스 학생';
+        multicampusInfo.info();
+    </script>
+    
+    <h2>4. 화살표함수에서 this</h2>
+    <pre>
+        화살표함수는 호출될 떄 this를 전달받지 않는다.
+        화살표함수는 this를 전달 받지 않기 때문에, 객체의 메서드나 생성자 함수에서 메서드를 선언할 때는 사용하지 않는다.
+        화살표함수에서의 this는 상위스코프의 this가 된다.
+    </pre>
+    <div id="thisNote4" class="note"></div>
+    <script>
+        let outerFnc = ()=>{
+            $('#thisNote4',`전역에 선언된 화살표 함수의 this : ${this.who}`);
+        }
+        
+        outerFnc();
+        
+        let testObj = {
+            who:'testObj의 who입니다.',
+            
+            fnc : function(){
+                $('#thisNote4',`메서드로 작성된 일반 함수의 this : ${this.who}`);
+                console.dir(this);
+            },
+            arrow : () => {
+                $('#thisNote4',`메서드로 작성된 화살표 함수의 this : ${this.who}`);
+                console.dir(this);
+            },
+            
+            innerFnc : function(){
+                (function(){
+                    $('#thisNote4',`메서드안에 함수로 작성된 일반 함수의 this : ${this.who}`);
+                    console.dir(this);
+                })();
+            
+            },
+            
+            innerFnc2 : function(){
+                 (()=>{
+                    $('#thisNote4',`메서드안에 함수로 작성된 일반 함수의 this : ${this.who}`);
+                    console.dir(this);
+                })();
+        
+            },
+            
+            innerFnc3 : function(){
+                    let that = this;
+                 (()=>{
+                    $('#thisNote4',`메서드안에 함수로 작성된 일반 함수의 that : ${that.who}`);
+                    console.dir(this);
+                })();
+        
+            }
+        }
+        
+        testObj.fnc();
+        testObj.arrow();
+        testObj.innerFnc();
+        testObj.innerFnc2();
+        testObj.innerFnc3();
+    </script>
+    <h2>5. 명시적 this 바인딩</h2>
+    <div id="thisNote5" class="note"></div>
+    <script>
+        let mc = {
+            who:'홍길동[멀티캠퍼스 학생]',
+            age:15,
+            info:function(){
+                $('#thisNote5',`이름 : ${this.who} / 나이 : ${this.age}`);
+                console.dir(this);
+            }
+        }
+            
+        let kitri = {
+            who:'성춘향[kitri 학생]',
+            age:17,
+            info:function(){
+                $('#thisNote5',`이름 : ${this.who} / 나이 : ${this.age}`);
+                console.dir(this);
+            } 
+            
+        }
+        function changeInfo(who,age){
+            this.who = who;
+            this.age = age;   
+        }
+        
+        //apply, call 메서드를 사용해 this를 명시적으로 바인딩 할 수 있다.
+        mc.info.apply(kitri);   //this에 kitri 바인딩
+        kitri.info.apply(mc);   //this에 mc 바인딩
+        
+        changeInfo.apply(mc, ['경제원[멀티캠퍼스]', 20]);
+        mc.info();
+        
+        changeInfo.call(kitri,'김지수[kitri]', 21);
+        kitri.info();
+    </script>
+</body>
+</html>

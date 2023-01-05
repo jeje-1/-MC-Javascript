@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style type="text/css">
+        .note{
+            border: 1px solid;
+            min-height:300px;
+        }
+    </style>
+      <script>
+        let $ = function(cssSelector, message){
+            
+           let htmlelements = document.querySelectorAll(cssSelector);
+           
+           if(message){
+               htmlelements.forEach(e => {e.innerHTML += message + '<br>'});
+           }
+           
+           return htmlelements;
+        }
+        
+    </script>
+</head>
+<body>
+    <h1>encapsulation</h1>
+    <div id="encapsulationNote" class="note"></div>
+    <script>
+        function Person(name,gender){
+            let _name = name;
+            let _gender = gender;
+            
+            // setter/getter를 통해 _name과 _gender에 접근 할 수 있도록 작성
+            // 클로저
+            
+            this.setName = function(name){
+                _name = name;
+            }
+            
+            this.getName = function(){
+                return _name;
+            }
+            
+            this.setGender = function(gender){
+                _gender = gender;
+            }
+            
+            this.getGender = function(){
+                return _gender;
+            }
+            //Object 객체의 toString 메서드를 오버라이드
+            this.toString = function(){
+                return `_name : ${_name}, _gender : ${_gender}`
+                    
+                
+            }
+            // 객체에 속성 추가/삭제/수정 불가
+            Object.freeze(this);
+        
+        }
+        
+        let gjw = new Person();
+        gjw.setName('경제원');
+        gjw.setGender('female');
+        console.dir(gjw);
+        
+        $('#encapsulationNote', gjw);
+        $('#encapsulationNote', `gjw.name : ${gjw.name}`);
+        $('#encapsulationNote', `gjw.gender : ${gjw.gender}`);
+        $('#encapsulationNote', `gjw._name : ${gjw.getName()}`);
+        $('#encapsulationNote', `gjw._gender : ${gjw.getGender()}`);
+        
+    </script>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</body>
+</html>
